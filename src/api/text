@@ -1,0 +1,60 @@
+import axios from "axios";
+import { create } from "../routes/links";
+
+const uploadApi = async (data) => {
+  console.log("Data in upload API");
+  console.log(data);
+
+  data.mimeType = "application/vnd.ekstep.ecml-archive";
+  data.contentType = "Resource";
+  data.createdBy = "6036c097-7ac5-44eb-afae-a2aac8178a42";
+
+  const wrappedData = {
+    content: data,
+  };
+
+  const requestData = {
+    request: wrappedData,
+  };
+
+  console.log(requestData);
+
+  let result = true;
+  await axios
+    .post(
+      "https://sunbirdsaas.com/api/content/v1/create",
+
+      {
+        requestData,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-channel-id": "0136268742469222406",
+          "X-Authenticated-User-Token":
+            "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJTS1pUNEh5WWlaeHppTnJJZFVrSy1yaWY1QXJVYkVDODRsWGoyeVB3R2pJIn0.eyJqdGkiOiI5ZDkzOTdkNy1kMTE2LTQ4OGQtYTQ4MS00OWM5YzcyYjQ5ODUiLCJleHAiOjE2NzcxNTA4NjAsIm5iZiI6MCwiaWF0IjoxNjc3MTI5MjYwLCJpc3MiOiJodHRwczovL3N1bmJpcmRzYWFzLmNvbS9hdXRoL3JlYWxtcy9zdW5iaXJkIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImY6ZTRmZDJjZjctMWIxOC00NWNmLWIwYjMtNTVjYzNlZGVhNTMzOjllZjY4ZDk1LTdkODAtNDBmYi1iNDc4LWQ1ZmY3OTQ2ODViOSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImltcGxlbWVudGF0aW9uIiwiYXV0aF90aW1lIjowLCJzZXNzaW9uX3N0YXRlIjoiM2NhMzNjOTctZmM2Zi00NzUxLTg4YzYtNWVhNmNhODZhODRmIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL3N1bmJpcmRzYWFzLmNvbSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiY3JlYXRlLXJlYWxtIiwib2ZmbGluZV9hY2Nlc3MiLCJhZG1pbiIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiU2hhc2hpa3VtYXIgUCBQIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiZGhmb19zaGFzaGlrdW1hciBwIiwiZ2l2ZW5fbmFtZSI6IlNoYXNoaWt1bWFyIFAiLCJmYW1pbHlfbmFtZSI6IlAiLCJlbWFpbCI6InNoKioqKioqKioqKioqKioqQGdtYWlsLmNvbSJ9.JBz8o5XT-zDnqpY0QuEUmFrSkbIT_t3uul98kCSM9aHE3t2eo_h-h8zLRuaF1gBvMrnUnJuZWe5v_8R0zdKULjlzGf6Ts_SQ__kC3U2jMPCMWg4-b3awvwBD6A_ISpZ0V3d93uznBztb09_HvNMw-AGI7K-0PKgIZz9xUgyaVlJcfExM61oFUplZfEtztYGCRgVhGhQkRy74Y41c-6_lYpI8OkreuD_Lvz_Yn13mJbzeYKsdUWxjY9xtBg0uh2137RXeVtEwPIFAIj4iI6NctM6HFxCDQG3EXaXn753_Y1nbR4x6OCRCWuhLIIiQCAvS5dKTvmqnhfUqF5_1Y20FPw",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJXTFBhVTZTY0cyejFZMng4Y0FWNDJMVlRscUhMekV0YyJ9.7fhXiT3Mhbu7PT2PITYyF2tdW8ZowYJYnzpK5yGgHqc",
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res);
+      console.log(res.data);
+
+      if (res.status === 200) {
+        result = true;
+      } else {
+        result = false;
+      }
+    })
+    .catch(function (error) {
+      console.log(error.response.data.error);
+      let err = 0;
+      return err;
+    });
+
+  return result;
+};
+
+export default uploadApi;
