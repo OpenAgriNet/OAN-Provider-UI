@@ -1,0 +1,12 @@
+.modalDiv {
+  margin-top: 100px;
+  margin-left: 100px;
+  margin-right: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(226, 226, 226);
+  border-radius: 10px;
+  background: linear-gradient(to bottom, #ffffff, #dfe4ff);
+}

@@ -1,0 +1,130 @@
+.headerDiv {
+  display: flex;
+  align-items: center;
+  background: white
+  ;
+  padding-top: 5px;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  width: 100%;
+  height: 70px;
+  padding-left: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.menuDiv {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+.layoutMenuDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.anchor {
+  margin: 10px;
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 5px 10px;
+  border: 2px solid #3E6139 ;
+  background-color: #3E6139 ;
+  font-size: 14px;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.anchor:hover {
+  background-color: #EFDA2F;
+  border-color: #EFDA2F;
+  color: black;
+}
+
+.anchor:focus,
+.anchor:active {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.selected {
+  margin: 10px;
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 5px 20px;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
+  background-color: #4F6F4A  ;
+  border-color: #4F6F4A  ;
+  font-size: 14px; /* Adjust the font size */
+}
+.profile {
+  border-left: 2px solid gray;
+  padding-left: 20px;
+  cursor: pointer;
+}
+
+.logoutButton {
+  margin-left: 10px;
+  border-radius: 5px;
+  width: 80px;
+  padding: 7px;
+  border: none;
+  background-color: #0d6efd;
+  color: white;
+}
+
+.userButton {
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  color: #0c343d;
+}
+
+.mainHead {
+  background: white ;
+  padding-top: 5px;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.TextStyle {
+  text-align: center;
+  margin-left: 10px;
+  border-left: 2px solid gray;
+  padding-left: 10px;
+  color: #4F6F4A;
+}
+
+.logodiv {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+.menuDiv {
+  display: flex;
+  flex-direction: row;
+}
+
+@media (max-width: 640px) {
+  .mainHead {
+    display: flex;
+    flex-direction: column;
+  }
+}

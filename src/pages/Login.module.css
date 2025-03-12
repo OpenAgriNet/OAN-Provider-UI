@@ -1,0 +1,26 @@
+/* styles.css */
+.inputIcon {
+  position: relative;
+}
+
+.input-with-icon input {
+  padding-right: 30px; /* Adjust the padding as needed */
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Adjust the position as needed */
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns */
+  grid-gap: 10px; /* Adjust the gap between columns */
+}
+
+.gridItem {
+  margin-bottom: 10px; /* Add margin between items */
+}
