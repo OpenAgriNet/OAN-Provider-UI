@@ -5,27 +5,25 @@ import imagePath from "../assets/Oan-logo.png";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import UserLoginSchema from "../schema/UserLoginSchema";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import { userLoginApi } from "../api/userLoginApi";
 import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import iconstyles from "./Login.module.css";
-import { Button } from "antd";
 
 function Login() {
   const [passwordShown, setPasswordShown] = useState(false);
-
+  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
-  const login = () => {
-    localStorage.setItem("login", true);
-    navigate("/");
-  };
+
+  // Check for an existing token and redirect if found
   useEffect(() => {
-    let login = localStorage.getItem("token");
-    if (login) {
-      navigate("/");
+    let token = localStorage.getItem("token");
+    if (token) {
+      navigate("/home");
     }
-  }, []);
+  }, [navigate]);
+
   const {
     register,
     handleSubmit,
@@ -33,18 +31,20 @@ function Login() {
   } = useForm({ resolver: yupResolver(UserLoginSchema) });
 
   const onSubmit = async (data) => {
+    setErrorMsg(""); // Clear any previous error
     const result = await userLoginApi(data);
-    if (result?.data?.user?.role === "admin") {
-      let token = localStorage.setItem("token", result?.data?.token);
-      let user = localStorage.setItem("user", result?.data?.user?.name);
 
-      navigate("/admin-home");
-    } else if (result?.data?.user?.role === "provider") {
-      let token = localStorage.setItem("token", result?.data?.token);
-      let user = localStorage.setItem("user", result?.data?.user?.name);
+    if (result.error) {
+      setErrorMsg(result.error);
+      return;
+    }
+
+    if (result?.user) {
+      localStorage.setItem("token", result?.token);
+      localStorage.setItem("user", result?.user?.name);
       navigate("/home");
     } else {
-      alert("Please check Email and Password");
+      setErrorMsg("Invalid credentials. Please check your email and password.");
     }
   };
 
@@ -56,15 +56,23 @@ function Login() {
     <div>
       <div
         style={{
-          background: "linear-gradient(to bottom, #FFFFFF, #EFDA2F )",
+          background: "linear-gradient(to bottom, #FFFFFF, #EFDA2F)",
           height: "80vh",
         }}
       >
         <div className={headerStyles.headerDiv}>
           <div>
-            <img src={imagePath} style={{ width: "72px", height: "auto", cursor: "pointer", marginLeft:'1rem' }} />
+            <img
+              src={imagePath}
+              alt="Logo"
+              style={{
+                width: "72px",
+                height: "auto",
+                cursor: "pointer",
+                marginLeft: "1rem",
+              }}
+            />
           </div>
-
           <div
             style={{
               textAlign: "center",
@@ -74,15 +82,13 @@ function Login() {
               color: "#4F6F4A",
             }}
           >
-            <h6>
-            AgriNet: An Open Network for Global Agriculture
-            </h6>
+            <h6>AgriNet: An Open Network for Global Agriculture</h6>
           </div>
         </div>
 
         <div className={styles.formDiv}>
           <form
-            className=" card-body form-floating mt-3 mx-1"
+            className="card-body form-floating mt-3 mx-1"
             onSubmit={handleSubmit(onSubmit)}
             autoComplete="off"
           >
@@ -97,45 +103,35 @@ function Login() {
                 <input
                   className="form-control"
                   type="text"
-                  name="contentName"
-                  id="contentName"
                   placeholder="Email"
                   {...register("username")}
-                ></input>
-                <label className="form-label" htmlFor="contentName">
-                  {" "}
-                  Email
-                </label>
+                />
+                <label className="form-label">Email</label>
                 {errors.username && <p>{errors.username.message}</p>}
               </div>
             </div>
+
             <div className="container mb-3">
               <div className="form-floating input-with-icon">
                 <input
                   className="form-control"
                   type={passwordShown ? "text" : "password"}
-                  name="contentName"
-                  id="contentName"
-                  placeholder="Name of the content"
+                  placeholder="Password"
                   {...register("password")}
-                  style={{ paddingRight: "30px" }} // Add padding to accommodate the icon
+                  style={{ paddingRight: "30px" }}
                 />
                 <div onClick={togglePassword} className={iconstyles.icon}>
                   {passwordShown ? <EyeOutlined /> : <EyeInvisibleOutlined />}
                 </div>
-                <label className="form-label" htmlFor="password">
-                  Password
-                </label>
+                <label className="form-label">Password</label>
                 {errors.password && <p>{errors.password.message}</p>}
               </div>
             </div>
+
             <div className="container mb-3">
               <div className="form-floating">
                 <select
                   className="form-select"
-                  name="role"
-                  id="role"
-                  placeholder="role"
                   {...register("role")}
                   defaultValue={"provider"}
                   hidden
@@ -143,80 +139,58 @@ function Login() {
                   <option value="provider">Provider</option>
                   <option value="admin">Admin</option>
                 </select>
-                {/* <label className="form-label" htmlFor="role">
-                  Role
-                </label> */}
                 {errors.role && <p>{errors.role.message}</p>}
               </div>
             </div>
-            <div className="container mb-3" style={{ display: 'flex', justifyContent: 'space-between' }}>
-  <div style={{ marginTop: '25px' }}>
-    <button
-      className="btn btn-primary"
-      style={{
-        backgroundColor: '#3E6139',
-        borderColor: '#3E6139',
-      }}
-      onClick={login}
-    >
-      Sign In
-    </button>
-  </div>
-  <div style={{ marginTop: '25px', marginLeft: '10px' }}>
-    <button
-      className="btn btn-primary"
-      style={{
-        backgroundColor: '#3E6139',
-        borderColor: '#3E6139',
-        paddingLeft: '10px',
-      }}
-      onClick={() => {
-        navigate('/register');
-      }}
-    >
-      Register
-    </button>
-  </div>
-</div>
 
+            <div
+              className="container mb-3"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              {errorMsg && (
+                <span style={{ color: "red", marginBottom: "10px" }}>
+                  {errorMsg}
+                </span>
+              )}
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{
+                    backgroundColor: "#3E6139",
+                    borderColor: "#3E6139",
+                  }}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  style={{
+                    backgroundColor: "#3E6139",
+                    borderColor: "#3E6139",
+                  }}
+                  onClick={() => navigate("/register")}
+                >
+                  Register
+                </button>
+              </div>
+            </div>
           </form>
           <br />
-          {/* <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-            }}
-          >
-            <div>
-              <Button
-                className={styles.loginButton}
-                onClick={() => {
-                  navigate("/register");
-                }}
-                title="Register as Provider"
-              >
-                Register as Provider
-              </Button>
-            </div>
-            <br />
-            <div>
-              <Button className={styles.loginButton}>
-                <a
-                  href="https://onest-fs-seeker.tekdinext.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Register as Seeker
-                </a>
-              </Button>
-            </div>
-          </div> */}
         </div>
       </div>
-      <div>
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 }

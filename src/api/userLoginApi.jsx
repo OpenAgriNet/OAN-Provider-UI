@@ -12,10 +12,11 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 export const userLoginApi = async (params = {}, header = {}) => {
   let headers = {
+    "Content-Type": "application/json", // Ensure JSON content-type is set
     ...header,
   };
   try {
-    const result = await post(`${baseUrl}/auth/login`, params, { headers });
+    const result = await post(`${baseUrl}auth/login`, params, { headers });
     if (result.data) {
       return result.data;
     } else {
@@ -28,13 +29,12 @@ export const userLoginApi = async (params = {}, header = {}) => {
     };
   }
 };
-
 export const userRegisterApi = async (params = {}, header = {}) => {
   let headers = {
     ...header,
   };
   try {
-    const result = await post(`${baseUrl}/auth/registerUser`, params, {
+    const result = await post(`${baseUrl}auth/registerUser`, params, {
       headers,
     });
     if (result.data) {
