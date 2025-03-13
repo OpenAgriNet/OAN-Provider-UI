@@ -15,7 +15,6 @@ import Swal from "sweetalert2";
 import { getCategoriesApi } from "../api/CategoryApi";
 import { getFulfillmentsApi } from "../api/FulfillmentApi";
 import { getLocationsApi } from "../api/LocationApi";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const TagContent = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -23,7 +22,6 @@ const TagContent = () => {
   const [fulfillments, setFulfillments] = useState([]);
   const [locations, setLocations] = useState([]);
   const [selectedState, setSelectedState] = useState("");
-  const [tags, setTags] = useState([]);
 
   useEffect(() => {
     // Fetch categories
@@ -104,9 +102,14 @@ const TagContent = () => {
     id: yup.string().required("ID is required"),
     provider_id: yup.string().required("Provider ID is required"),
     title: yup.string().required("Title is required"),
-    description: yup.string().required("Description is required"),
-    icon: yup.mixed().required("Icon is required"),
-    url: yup.string().url("Enter a valid URL").required("URL is required"),
+    // Use the correct field names here:
+    short_desc: yup.string().required("Short Description is required"),
+    long_desc: yup.string().required("Long Description is required"),
+    item_img: yup.mixed().required("Item image is required"),
+    media_url: yup
+      .string()
+      .url("Enter a valid URL")
+      .required("Media URL is required"),
   });
 
   const {
@@ -115,74 +118,88 @@ const TagContent = () => {
     formState: { errors },
     reset,
     control,
+    setValue,
   } = useForm({ resolver: yupResolver(validationSchema) });
 
   const onSubmit = async (data) => {
     try {
-      const formData = new FormData();
+      // Construct the payload
+      const payload = {
+        items: {
+          id: data.id,
+          provider_id: data.provider_id,
+          name: data.title,
+          short_desc: data.short_desc,
+          long_desc: data.long_desc,
+        },
+        item_categories: [
+          {
+            category_id: data.item_categories,
+          },
+        ],
+        item_fulfillments: [
+          {
+            fulfillment_id: data.item_fulfillments,
+          },
+        ],
+        item_locations: [
+          {
+            location_id: data.item_location_city,
+          },
+        ],
+        item_images: [{}],
+        item_medias: [
+          {
+            mimetype: data.item_medias,
+            url: data.media_url,
+          },
+        ],
+      };
+
+      // If user uploads an image:
       if (selectedFile) {
+        const formData = new FormData();
         formData.append("file", selectedFile);
         const imageUploadResponse = await uploadImage(formData);
-        data.icon = imageUploadResponse?.key;
+        payload.item_images[0].url = imageUploadResponse?.key || "";
+        payload.item_images.url = imageUploadResponse?.key;
       }
-      const result = await createContentApi(data);
-      if (result?.data?.icar_?.insert_Content) {
+      // Make the API call
+      const result = await createContentApi(payload);
+
+      // Check if the API indicates success or failure
+      // (Adjust the condition based on your API's actual response format)
+      if (result?.status && result.status !== 200) {
+        // Show an error popup
         Swal.fire({
-          title: "Success!",
-          text: "Content added successfully!",
+          title: "Error!",
+          text: result.error || "Something went wrong. Please try again.",
+          icon: "error",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#3e6139",
+        });
+      } else {
+        // Show a success popup
+        Swal.fire({
+          title: "Content Created!",
+          text: "Your content has been successfully created.",
           icon: "success",
           confirmButtonText: "OK",
-          width: "300px",
-          padding: "1rem",
-          buttonsStyling: false,
-          customClass: {
-            icon: "custom-icon",
-            title: "custom-title",
-            confirmButton: "custom-confirm-button",
-          },
-          didRender: () => {
-            const confirmButton = document.querySelector(".swal2-confirm");
-            if (confirmButton) {
-              confirmButton.style.backgroundColor = "#3e6139";
-              confirmButton.style.color = "white";
-              confirmButton.style.border = "none";
-              confirmButton.style.padding = "0.4rem 2rem";
-              confirmButton.style.fontSize = "14px";
-              confirmButton.style.cursor = "pointer";
-              confirmButton.style.borderRadius = "5px";
-            }
-          },
-        }).then(() => {
-          navigate("/content");
+          confirmButtonColor: "#3e6139",
+        }).then((swalResult) => {
+          if (swalResult.isConfirmed) {
+            navigate("/content");
+          }
         });
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error creating content:", error);
       Swal.fire({
         title: "Error!",
-        text: "Something went wrong while adding the content.",
+        text: error?.message || "Something went wrong. Please try again.",
         icon: "error",
         confirmButtonText: "OK",
-        width: "300px",
-        padding: "1rem",
-        buttonsStyling: false,
-        customClass: {
-          icon: "custom-icon",
-          title: "custom-title",
-          confirmButton: "custom-confirm-button",
-        },
-        didRender: () => {
-          const confirmButton = document.querySelector(".swal2-confirm");
-          if (confirmButton) {
-            confirmButton.style.backgroundColor = "#4CAF50";
-            confirmButton.style.color = "white";
-            confirmButton.style.border = "none";
-            confirmButton.style.padding = "0.4rem 1rem";
-            confirmButton.style.fontSize = "14px";
-            confirmButton.style.cursor = "pointer";
-            confirmButton.style.borderRadius = "5px";
-          }
-        },
+        confirmButtonColor: "#3e6139",
       });
     }
   };
@@ -420,155 +437,11 @@ const TagContent = () => {
           );
         }
         return null;
-      case "tags":
-        return (
-          <div key={fieldKey}>
-            {renderTagsField()}
-            {fieldError && <p style={{ color: "red" }}>{fieldError.message}</p>}
-          </div>
-        );
 
       default:
         return null;
     }
   };
-  const addTag = () => {
-    setTags((prev) => [
-      ...prev,
-      {
-        descriptor: { code: "", name: "" },
-        list: [], // list items will be added later
-      },
-    ]);
-  };
-
-  // Update functions for tag descriptor inputs
-  const updateTagDescriptor = (index, key, value) => {
-    setTags((prev) => {
-      const newTags = [...prev];
-      newTags[index].descriptor[key] = value;
-      return newTags;
-    });
-  };
-
-  // Function to add a list item to a tag
-  const addTagList = (tagIndex) => {
-    setTags((prev) => {
-      const newTags = [...prev];
-      newTags[tagIndex].list.push({
-        descriptor: { code: "", name: "" },
-        value: "",
-      });
-      return newTags;
-    });
-  };
-
-  // Update functions for list item inputs
-  const updateTagListItem = (tagIndex, listIndex, key, value) => {
-    setTags((prev) => {
-      const newTags = [...prev];
-      newTags[tagIndex].list[listIndex][key] = value;
-      return newTags;
-    });
-  };
-
-  const updateListDescriptor = (tagIndex, listIndex, key, value) => {
-    setTags((prev) => {
-      const newTags = [...prev];
-      newTags[tagIndex].list[listIndex].descriptor[key] = value;
-      return newTags;
-    });
-  };
-
-  // Custom rendering for the tags field
-  const renderTagsField = () => {
-    return (
-      <div className="container mb-3">
-        <label style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
-          Tags
-        </label>
-        <TransitionGroup>
-          {tags.map((tag, tagIndex) => (
-            <CSSTransition key={tagIndex} timeout={300} classNames="fade">
-              <div
-                style={{
-                  border: "1px solid #ccc",
-                  padding: "1rem",
-                  marginBottom: "1rem",
-                }}
-              >
-                <div style={{ marginBottom: "0.5rem" }}>
-                  <input
-                    type="text"
-                    placeholder="Descriptor Code"
-                    value={tag.descriptor.code}
-                    onChange={(e) =>
-                      updateTagDescriptor(tagIndex, "code", e.target.value)
-                    }
-                    style={{ marginRight: "0.5rem" }}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Descriptor Name"
-                    value={tag.descriptor.name}
-                    onChange={(e) =>
-                      updateTagDescriptor(tagIndex, "name", e.target.value)
-                    }
-                  />
-                </div>
-                <div style={{ marginBottom: "0.5rem" }}>
-                  <button type="button" onClick={() => addTagList(tagIndex)}>
-                    + Add More List
-                  </button>
-                </div>
-                {tag.list.map((listItem, listIndex) => (
-                  <div
-                    key={listIndex}
-                    style={{
-                      marginLeft: "1rem",
-                      marginBottom: "0.5rem",
-                    }}
-                  >
-                    <input
-                      type="text"
-                      placeholder="List Descriptor Code"
-                      value={listItem.descriptor.code}
-                      onChange={(e) =>
-                        updateListDescriptor(tagIndex, listIndex, "code", e.target.value)
-                      }
-                      style={{ marginRight: "0.5rem" }}
-                    />
-                    <input
-                      type="text"
-                      placeholder="List Descriptor Name"
-                      value={listItem.descriptor.name}
-                      onChange={(e) =>
-                        updateListDescriptor(tagIndex, listIndex, "name", e.target.value)
-                      }
-                      style={{ marginRight: "0.5rem" }}
-                    />
-                    <input
-                      type="text"
-                      placeholder="Value"
-                      value={listItem.value}
-                      onChange={(e) =>
-                        updateTagListItem(tagIndex, listIndex, "value", e.target.value)
-                      }
-                    />
-                  </div>
-                ))}
-              </div>
-            </CSSTransition>
-          ))}
-        </TransitionGroup>
-        <button type="button" onClick={addTag}>
-          + Add More
-        </button>
-      </div>
-    );
-  };
-
-  // Modify your renderField function to handle type "tags"
 
   return (
     <div style={{ background: "linear-gradient(to bottom, #FFFFFF, #EFDA2F)" }}>
@@ -636,6 +509,7 @@ const TagContent = () => {
               <div className={styles.formbutton}>
                 <div className={styles.submit}>
                   <button
+                    type="submit"
                     className="btn btn-primary"
                     style={{
                       borderColor: "#3e6139",

@@ -731,7 +731,7 @@ const MyCourses = () => {
             {contentList.button.button1}
           </a>
         </div>
-        <div>
+        {/* <div>
           <a
             className={styles.anchor}
             style={{
@@ -752,7 +752,7 @@ const MyCourses = () => {
           >
             {contentList.button.button2}
           </a>
-        </div>
+        </div> */}
         <div>
           <Popover
             content={content}

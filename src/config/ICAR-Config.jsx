@@ -1,3 +1,4 @@
+// ICAR-Config.jsx
 import AppLogoImg from "../assets/Oan-logo.png";
 import Avatar from "../assets/aavtar.jpeg";
 
@@ -164,9 +165,8 @@ export const publishContent = {
     },
     tags: {
       label: "Tags",
-      validation: "tags", // Add validation as needed
+      validation: "tags", 
       type: "tags",
-      // You can optionally add a default value here:
       options: [] 
     },
   },
@@ -183,9 +183,9 @@ export const publishContent = {
 export const contentList = {
   button: {
     button1: "New",
-    button2: "Bulk Upload",
+    // button2: "Bulk Upload",
     button3: "Actions",
-  },
+    },
   editModal: {
     title: "Edit Modal",
     subTitle:
@@ -358,16 +358,16 @@ export const uploadCsv = {
 
 export const api = {
   endpoints: {
-    createContent: "provider/icarcontent",
-    getContent: "provider/content",
-    updateContent: "provider/content",
-    getCollectionList: "provider/content",
-    createNewContentCollection: "provider/contentCollection",
-    getCollectionInfo: "provider/collection",
-    uploadImage: "provider/uploadImage",
-    uploadCSV: "provider/createBulkContent",
-    getContentById: "provider/contentById",
-    deleteContentById: "provider/content",
-    resetPassword: "provider/resetPassword",
+    createContent: "addContent",
+    getContent: "content",
+    updateContent: "content",
+    getCollectionList: "content",
+    createNewContentCollection: "contentCollection",
+    getCollectionInfo: "collection",
+    uploadImage: "uploadImage",
+    uploadCSV: "createBulkContent",
+    getContentById: "contentById",
+    deleteContentById: "content",
+    resetPassword: "resetPassword",
   },
 };
