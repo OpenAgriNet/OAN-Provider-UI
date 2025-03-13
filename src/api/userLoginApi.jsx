@@ -31,12 +31,12 @@ export const userLoginApi = async (params = {}, header = {}) => {
 };
 export const userRegisterApi = async (params = {}, header = {}) => {
   let headers = {
+    "Content-Type": "application/json",
     ...header,
   };
   try {
-    const result = await post(`${baseUrl}auth/registerUser`, params, {
-      headers,
-    });
+    // POST request to /auth/registerUser
+    const result = await post(`${baseUrl}auth/registerUser`, params, { headers });
     if (result.data) {
       return result.data;
     } else {
