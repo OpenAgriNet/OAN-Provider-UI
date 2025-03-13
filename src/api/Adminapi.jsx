@@ -1,3 +1,4 @@
+// Adminapi.jsx
 import axios from "axios";
 import { create } from "../routes/links";
 import {
@@ -87,9 +88,7 @@ export const createContentApi = async (params = {}, header = {}) => {
     Authorization: "Bearer " + localStorage.getItem("token"),
   };
   try {
-    const result = await post(`${baseUrl}/${api.endpoints.createContent}`, params, {
-      headers,
-    });
+    const result = await post(`${baseUrl}${api.endpoints.createContent}`, params, { headers });
     if (result.data) {
       return result.data;
     } else {
@@ -370,7 +369,7 @@ export const uploadImage = async (params = {}, header = {}) => {
     Authorization: "Bearer " + localStorage.getItem("token"),
   };
   try {
-    const result = await post(`${baseUrl}/${api.endpoints.uploadImage}`, params, {
+    const result = await post(`${baseUrl}${api.endpoints.uploadImage}`, params, {
       headers,
     });
     if (result?.data) {
