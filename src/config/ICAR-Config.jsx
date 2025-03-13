@@ -358,16 +358,16 @@ export const uploadCsv = {
 
 export const api = {
   endpoints: {
-    createContent: "addContent",
-    getContent: "content",
-    updateContent: "content",
-    getCollectionList: "content",
-    createNewContentCollection: "contentCollection",
-    getCollectionInfo: "collection",
-    uploadImage: "uploadImage",
-    uploadCSV: "createBulkContent",
-    getContentById: "contentById",
-    deleteContentById: "content",
-    resetPassword: "resetPassword",
+    createContent: "provider/addContent",
+    getContent: "provider/content",
+    updateContent: "provider/content",
+    getCollectionList: "provider/content",
+    createNewContentCollection: "provider/contentCollection",
+    getCollectionInfo: "provider/collection",
+    uploadImage: "provider/uploadImage",
+    uploadCSV: "provider/createBulkContent",
+    getContentById: "provider/contentById",
+    deleteContentById: "provider/content",
+    resetPassword: "provider/resetPassword",
   },
 };
