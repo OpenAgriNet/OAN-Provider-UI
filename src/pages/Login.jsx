@@ -16,9 +16,9 @@ function Login() {
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
-  // Check for an existing token and redirect if found
+  // Redirect if user is already logged in
   useEffect(() => {
-    let token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (token) {
       navigate("/home");
     }
@@ -28,28 +28,40 @@ function Login() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(UserLoginSchema) });
+  } = useForm({
+    resolver: yupResolver(UserLoginSchema),
+  });
 
+  // Toggle the visibility of the password field
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
+  };
+
+  // Handle the login form submission
   const onSubmit = async (data) => {
-    setErrorMsg(""); // Clear any previous error
-    const result = await userLoginApi(data);
+    setErrorMsg("");
+    console.log("Form data submitted:", data);
 
+    // Call the login API
+    const result = await userLoginApi(data);
+    console.log("Login result from API:", result);
+
+    // Check if the API call returned an error
     if (result.error) {
       setErrorMsg(result.error);
       return;
     }
 
-    if (result?.user) {
-      localStorage.setItem("token", result?.token);
-      localStorage.setItem("user", result?.user?.name);
+    // The backend response structure is:
+    // { success, message, data: { token, user } }
+    const loginData = result.data;
+    if (loginData && loginData.user) {
+      localStorage.setItem("token", loginData.token);
+      localStorage.setItem("user", loginData.user.name);
       navigate("/home");
     } else {
       setErrorMsg("Invalid credentials. Please check your email and password.");
     }
-  };
-
-  const togglePassword = () => {
-    setPasswordShown(!passwordShown);
   };
 
   return (
@@ -60,6 +72,7 @@ function Login() {
           height: "80vh",
         }}
       >
+        {/* Header Section */}
         <div className={headerStyles.headerDiv}>
           <div>
             <img
@@ -86,6 +99,7 @@ function Login() {
           </div>
         </div>
 
+        {/* Login Form */}
         <div className={styles.formDiv}>
           <form
             className="card-body form-floating mt-3 mx-1"
@@ -98,6 +112,7 @@ function Login() {
               </div>
             </div>
 
+            {/* Email / Username Field */}
             <div className="container mb-3">
               <div className="form-floating">
                 <input
@@ -107,10 +122,13 @@ function Login() {
                   {...register("username")}
                 />
                 <label className="form-label">Email</label>
-                {errors.username && <p>{errors.username.message}</p>}
+                {errors.username && (
+                  <p style={{ color: "red" }}>{errors.username.message}</p>
+                )}
               </div>
             </div>
 
+            {/* Password Field */}
             <div className="container mb-3">
               <div className="form-floating input-with-icon">
                 <input
@@ -124,10 +142,13 @@ function Login() {
                   {passwordShown ? <EyeOutlined /> : <EyeInvisibleOutlined />}
                 </div>
                 <label className="form-label">Password</label>
-                {errors.password && <p>{errors.password.message}</p>}
+                {errors.password && (
+                  <p style={{ color: "red" }}>{errors.password.message}</p>
+                )}
               </div>
             </div>
 
+            {/* Hidden Role Field */}
             <div className="container mb-3">
               <div className="form-floating">
                 <select
@@ -139,23 +160,22 @@ function Login() {
                   <option value="provider">Provider</option>
                   <option value="admin">Admin</option>
                 </select>
-                {errors.role && <p>{errors.role.message}</p>}
+                {errors.role && (
+                  <p style={{ color: "red" }}>{errors.role.message}</p>
+                )}
               </div>
             </div>
 
+            {/* Error Message & Buttons */}
             <div
               className="container mb-3"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-              }}
+              style={{ display: "flex", flexDirection: "column" }}
             >
               {errorMsg && (
                 <span style={{ color: "red", marginBottom: "10px" }}>
                   {errorMsg}
                 </span>
               )}
-
               <div
                 style={{
                   display: "flex",
