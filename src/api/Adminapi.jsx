@@ -459,14 +459,14 @@ export const updateCollection = async (id, params = {}, header = {}) => {
   }
 };
 
-export const getContentById = async (id, params = {}, header = {}) => {
+export const getContentById = async (item_id, params = {}, header = {}) => {
   let headers = {
     ...header,
     Authorization: "Bearer " + localStorage.getItem("token"),
   };
 
   try {
-    const result = await get(`${baseUrl}/${api.endpoints.getContentById}/${id}`, {
+    const result = await get(`${baseUrl}${api.endpoints.getContentById}/${item_id}`, {
       headers,
     });
 

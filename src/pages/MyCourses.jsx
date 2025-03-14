@@ -54,7 +54,6 @@ const customStyles = {
 };
 
 const MyCourses = () => {
-
   const navigate = useNavigate();
 
   const [rowData, setRowData] = useState([]);
@@ -142,7 +141,7 @@ const MyCourses = () => {
 
   const handleEdit = async (params) => {
     try {
-      let response = await getContentById(params?.id);
+      let response = await getContentById(params?.item_id);
       if (response) {
         openModal();
         setFormData(response);
@@ -151,6 +150,17 @@ const MyCourses = () => {
       console.error("Error fetching data:", error);
     }
   };
+  const handleRowClick = async (record) => {
+    try {
+      // Call the API using the item_id from the clicked row
+      const contentData = await getContentById(record?.item_id);
+      setFormData(contentData);
+      setIsOpen(true);
+    } catch (error) {
+      console.error("Error fetching content details:", error);
+    }
+  };
+  
 
   const combinedFunction = () => {
     handleEdit(params);
@@ -342,10 +352,9 @@ const MyCourses = () => {
       title: "Created Date",
       dataIndex: "createdDate",
       key: "createdDate",
-      render: (date) => date ? moment(date).format("DD-MM-YYYY") : "",
+      render: (date) => (date ? moment(date).format("DD-MM-YYYY") : ""),
     },
   ];
-  
 
   const content = (
     <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
@@ -491,7 +500,7 @@ const MyCourses = () => {
         // Add a createdDate property (using current date) for each row
         const dataWithCreatedDate = response.map((item) => ({
           ...item,
-          createdDate: new Date() // You can change this logic as needed
+          createdDate: new Date(), // You can change this logic as needed
         }));
         setRowData(dataWithCreatedDate);
         setmyContentData(dataWithCreatedDate);
@@ -502,8 +511,6 @@ const MyCourses = () => {
       console.error("API call failed:", error);
     }
   };
-  
-  
 
   // if (selectCollection) {
   //   filteredArray = myContentData.filter((item) => {
@@ -548,7 +555,9 @@ const MyCourses = () => {
                     defaultValue={formData[key]}
                     {...register(key, {
                       required:
-                        key === "title" || key === "url" || key === "description"
+                        key === "title" ||
+                        key === "url" ||
+                        key === "description"
                           ? "This field is required"
                           : false,
                     })}
@@ -855,39 +864,22 @@ const MyCourses = () => {
         ) : null}
       </div>
       <div style={{ width: "100%", height: "100vh", marginTop: "5px" }}>
-        {/* <AgGridReact
-        ref={gridRef}
-        rowData={rowData}
-        columnDefs={columnDefs}
-        defaultColDef={defaultColDef}
-        animateRows={true}
-        rowSelection="multiple"
-      /> */}
+
         <Table
           columns={columns}
           dataSource={rowData}
-          rowKey="id"
+          rowKey="item_id"
           scroll={{ x: "max-content" }}
           bordered={true}
+          onRow={(record) => ({
+            onClick: () => handleRowClick(record),
+            style: { cursor: "pointer" },
+          })}
           rowSelection={{
             selectedRowKeys,
             onChange: (selectedKeys, selectedRows) => {
               setSelectedRowKeys(selectedKeys);
               setSelectedRows(selectedRows);
-            },
-            onSelect: (record, selected) => {
-              if (selected) {
-                let updatedSelectedRowKeys = [
-                  ...selectedRows?.map((row) => row?.id),
-                  record?.id,
-                ];
-                // setValue("content_id", updatedSelectedRowKeys);
-              } else {
-                let updatedSelectedRowKeys = selectedRowKeys.filter(
-                  (id) => id !== record.id
-                );
-                // setValue("content_id", updatedSelectedRowKeys);
-              }
             },
             type: "checkbox",
           }}

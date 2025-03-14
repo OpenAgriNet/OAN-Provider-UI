@@ -119,10 +119,15 @@ export const publishContent = {
       validation: "long_desc",
       type: "textarea",
     },
+    // item_img: {
+    //   label: "Item Image",
+    //   validation: "item_img",
+    //   type: "file",
+    // },
     item_img: {
       label: "Item Image",
       validation: "item_img",
-      type: "file",
+      type: "text",
     },
     media_url: {
       label: "Media URL",
@@ -224,10 +229,15 @@ export const contentList = {
         validation: "long_desc",
         type: "textarea",
       },
+      // item_img: {
+      //   label: "Item Image",
+      //   validation: "item_img",
+      //   type: "file",
+      // },
       item_img: {
         label: "Item Image",
         validation: "item_img",
-        type: "file",
+        type: "text",
       },
       media_url: {
         label: "Media URL",

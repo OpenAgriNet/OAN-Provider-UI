@@ -147,7 +147,9 @@ const TagContent = () => {
             location_id: data.item_location_city,
           },
         ],
-        item_images: [{}],
+        item_images: [{
+          url: data.item_img,
+        }],
         item_medias: [
           {
             mimetype: data.item_medias,
