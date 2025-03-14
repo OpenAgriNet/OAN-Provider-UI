@@ -168,159 +168,184 @@ const MyCourses = () => {
     let response = await getCollectionInfo(selectedId);
     setSelectCollection(response);
   };
+  // const columns = [
+  //   {
+  //     title: "Title",
+  //     dataIndex: "title",
+  //     sorter: (a, b) => b.id < a.id,
+  //     sortOrder: "descend",
+  //     filterDropdown: ({
+  //       setSelectedKeys,
+  //       selectedKeys,
+  //       confirm,
+  //       clearFilters,
+  //     }) => {
+  //       return (
+  //         <>
+  //           <Input
+  //             autoFocus
+  //             placeholder="Search by title"
+  //             value={selectedKeys[0]}
+  //             onChange={(e) => {
+  //               setSelectedKeys(e.target.value ? [e.target.value] : []);
+  //               confirm({ closeDropdown: false });
+  //             }}
+  //           ></Input>
+  //         </>
+  //       );
+  //     },
+  //     filterIcon: () => {
+  //       return <SearchOutlined />;
+  //     },
+  //     onFilter: (value, record) => {
+  //       return record?.title?.toLowerCase().includes(value?.toLowerCase());
+  //     },
+  //     render: (value, record) => (
+  //       <span>
+  //         <button
+  //           style={{
+  //             background: "none",
+  //             border: "none",
+  //             padding: 0,
+  //             font: "inherit",
+  //             textDecoration: "none",
+  //             cursor: "pointer",
+  //           }}
+  //           onMouseEnter={(e) => {
+  //             e.currentTarget.style.textDecoration = "underline";
+  //           }}
+  //           onMouseLeave={(e) => {
+  //             e.currentTarget.style.textDecoration = "none";
+  //           }}
+  //           size="xs"
+  //           onClick={() => {
+  //             handleEdit(record);
+  //           }}
+  //         >
+  //           {value}
+  //         </button>
+  //       </span>
+  //     ),
+  //   },
+
+  //   {
+  //     title: "Crop",
+  //     dataIndex: "crop",
+  //     filterDropdown: ({
+  //       setSelectedKeys,
+  //       selectedKeys,
+  //       confirm,
+  //       clearFilters,
+  //     }) => {
+  //       return (
+  //         <>
+  //           <Input
+  //             autoFocus
+  //             placeholder="Search by crop"
+  //             value={selectedKeys[0]}
+  //             onChange={(e) => {
+  //               setSelectedKeys(e.target.value ? [e.target.value] : []);
+  //               confirm({ closeDropdown: false });
+  //             }}
+  //           ></Input>
+  //         </>
+  //       );
+  //     },
+  //     filterIcon: () => {
+  //       return <SearchOutlined />;
+  //     },
+  //     onFilter: (value, record) => {
+  //       return record?.language?.toLowerCase().includes(value?.toLowerCase());
+  //     },
+  //   },
+  //   {
+  //     title: "Language",
+  //     dataIndex: "language",
+  //     filterDropdown: ({
+  //       setSelectedKeys,
+  //       selectedKeys,
+  //       confirm,
+  //       clearFilters,
+  //     }) => {
+  //       return (
+  //         <>
+  //           <Input
+  //             autoFocus
+  //             placeholder="Search by language"
+  //             value={selectedKeys[0]}
+  //             onChange={(e) => {
+  //               setSelectedKeys(e.target.value ? [e.target.value] : []);
+  //               confirm({ closeDropdown: false });
+  //             }}
+  //           ></Input>
+  //         </>
+  //       );
+  //     },
+  //     filterIcon: () => {
+  //       return <SearchOutlined />;
+  //     },
+  //     onFilter: (value, record) => {
+  //       return record?.language?.toLowerCase().includes(value?.toLowerCase());
+  //     },
+  //   },
+  //   {
+  //     title: "Created Date",
+  //     dataIndex: "publishDate",
+  //     key: "publishDate",
+  //     render: (text) => {
+  //       if (!text) {
+  //         return <span>{""}</span>;
+  //       }
+  //       const formattedDate = moment(text).format("DD-MM-YYYY");
+  //       return <span>{formattedDate}</span>;
+  //     },
+  //   },
+
+  //   // {
+  //   //   title: "Action",
+  //   //   dataIndex: "",
+  //   //   key: "x",
+  //   //   render: (value) => (
+  //   //     <span>
+  //   //       <Button
+  //   //         style={{ backgroundColor: "green", color: "white" }}
+  //   //         size="xs"
+  //   //         onClick={() => {
+  //   //           handleEdit(value);
+  //   //         }}
+  //   //       >
+  //   //         Edit
+  //   //       </Button>
+  //   //       <Divider type="vertical" />
+  //   //     </span>
+  //   //   ),
+  //   // },
+  // ];
+
   const columns = [
     {
-      title: "Title",
-      dataIndex: "title",
-      sorter: (a, b) => b.id < a.id,
-      sortOrder: "descend",
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => {
-        return (
-          <>
-            <Input
-              autoFocus
-              placeholder="Search by title"
-              value={selectedKeys[0]}
-              onChange={(e) => {
-                setSelectedKeys(e.target.value ? [e.target.value] : []);
-                confirm({ closeDropdown: false });
-              }}
-            ></Input>
-          </>
-        );
-      },
-      filterIcon: () => {
-        return <SearchOutlined />;
-      },
-      onFilter: (value, record) => {
-        return record?.title?.toLowerCase().includes(value?.toLowerCase());
-      },
-      render: (value, record) => (
-        <span>
-          <button
-            style={{
-              background: "none",
-              border: "none",
-              padding: 0,
-              font: "inherit",
-              textDecoration: "none",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.textDecoration = "underline";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.textDecoration = "none";
-            }}
-            size="xs"
-            onClick={() => {
-              handleEdit(record);
-            }}
-          >
-            {value}
-          </button>
-        </span>
-      ),
-    },
-
-    {
-      title: "Crop",
-      dataIndex: "crop",
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => {
-        return (
-          <>
-            <Input
-              autoFocus
-              placeholder="Search by crop"
-              value={selectedKeys[0]}
-              onChange={(e) => {
-                setSelectedKeys(e.target.value ? [e.target.value] : []);
-                confirm({ closeDropdown: false });
-              }}
-            ></Input>
-          </>
-        );
-      },
-      filterIcon: () => {
-        return <SearchOutlined />;
-      },
-      onFilter: (value, record) => {
-        return record?.language?.toLowerCase().includes(value?.toLowerCase());
-      },
+      title: "Item Name",
+      dataIndex: "item_name",
+      key: "item_name",
     },
     {
-      title: "Language",
-      dataIndex: "language",
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => {
-        return (
-          <>
-            <Input
-              autoFocus
-              placeholder="Search by language"
-              value={selectedKeys[0]}
-              onChange={(e) => {
-                setSelectedKeys(e.target.value ? [e.target.value] : []);
-                confirm({ closeDropdown: false });
-              }}
-            ></Input>
-          </>
-        );
-      },
-      filterIcon: () => {
-        return <SearchOutlined />;
-      },
-      onFilter: (value, record) => {
-        return record?.language?.toLowerCase().includes(value?.toLowerCase());
-      },
+      title: "Provider Name",
+      dataIndex: "provider_name",
+      key: "provider_name",
+    },
+    {
+      title: "Short Description",
+      dataIndex: "provider_short_desc",
+      key: "provider_short_desc",
     },
     {
       title: "Created Date",
-      dataIndex: "publishDate",
-      key: "publishDate",
-      render: (text) => {
-        if (!text) {
-          return <span>{""}</span>;
-        }
-        const formattedDate = moment(text).format("DD-MM-YYYY");
-        return <span>{formattedDate}</span>;
-      },
+      dataIndex: "createdDate",
+      key: "createdDate",
+      render: (date) => date ? moment(date).format("DD-MM-YYYY") : "",
     },
-
-    // {
-    //   title: "Action",
-    //   dataIndex: "",
-    //   key: "x",
-    //   render: (value) => (
-    //     <span>
-    //       <Button
-    //         style={{ backgroundColor: "green", color: "white" }}
-    //         size="xs"
-    //         onClick={() => {
-    //           handleEdit(value);
-    //         }}
-    //       >
-    //         Edit
-    //       </Button>
-    //       <Divider type="vertical" />
-    //     </span>
-    //   ),
-    // },
   ];
+  
 
   const content = (
     <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
@@ -462,16 +487,23 @@ const MyCourses = () => {
   const getMyCourses = async () => {
     try {
       let response = await getContent();
-      if (response?.Content) {
-        setRowData(response.Content);
-        setmyContentData(response.Content);
+      if (Array.isArray(response) && response.length > 0) {
+        // Add a createdDate property (using current date) for each row
+        const dataWithCreatedDate = response.map((item) => ({
+          ...item,
+          createdDate: new Date() // You can change this logic as needed
+        }));
+        setRowData(dataWithCreatedDate);
+        setmyContentData(dataWithCreatedDate);
       } else {
-        console.error("Error: Response does not contain expected 'Content'");
+        console.error("API response is empty or not an array");
       }
     } catch (error) {
       console.error("API call failed:", error);
     }
   };
+  
+  
 
   // if (selectCollection) {
   //   filteredArray = myContentData.filter((item) => {

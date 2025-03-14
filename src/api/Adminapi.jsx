@@ -148,6 +148,7 @@ export const getProviderInfo = async (id, params = {}, header = {}) => {
   }
 };
 
+
 export const getContent = async (params = {}, header = {}) => {
   let headers = {
     ...header,
@@ -155,12 +156,12 @@ export const getContent = async (params = {}, header = {}) => {
   };
 
   try {
-    const result = await get(`${baseUrl}/${api.endpoints.getContent}`, {
+    const result = await get(`${baseUrl}${api.endpoints.getContent}`, {
       headers,
     });
 
     if (result?.data) {
-      return result?.data?.data?.icar_;
+      return result.data; 
     } else {
       return [];
     }
@@ -172,13 +173,14 @@ export const getContent = async (params = {}, header = {}) => {
   }
 };
 
+
 export const updateContent = async (id, params = {}, header = {}) => {
   try {
     let headers = {
       ...header,
       Authorization: "Bearer " + localStorage.getItem("token"),
     };
-    const result = await patch(`${baseUrl}/${api.endpoints.updateContent}/${id}`, params, {
+    const result = await patch(`${baseUrl}${api.endpoints.updateContent}/${id}`, params, {
       headers,
     });
     if (result?.data) {
@@ -268,12 +270,12 @@ export const getCollectionList = async (params = {}, header = {}) => {
   };
 
   try {
-    const result = await get(`${baseUrl}/${api.endpoints.getCollectionList}`, {
+    const result = await get(`${baseUrl}${api.endpoints.getCollectionList}`, {
       headers,
     });
 
     if (result?.data) {
-      return result?.data?.data?.icar_;
+      return result?.data;
     } else {
       return [];
     }
@@ -488,7 +490,7 @@ export const deleteContentbyId = async (id, params = {}, header = {}) => {
       Authorization: "Bearer " + localStorage.getItem("token"),
     };
     const result = await distory(
-      `${baseUrl}/${api.endpoints.deleteContentById}/${id}`,
+      `${baseUrl}${api.endpoints.deleteContentById}/${id}`,
       {},
       {
         headers: headers ? headers : {},

@@ -143,7 +143,7 @@ export const publishContent = {
       label: "Select a Category",
       validation: "item_categories",
       type: "selectDynamic",
-      options: [], 
+      options: [],
     },
     item_fulfillments: {
       label: "Select a Fulfillment",
@@ -165,9 +165,9 @@ export const publishContent = {
     },
     tags: {
       label: "Tags",
-      validation: "tags", 
+      validation: "tags",
       type: "tags",
-      options: [] 
+      options: [],
     },
   },
   buttons: {
@@ -185,150 +185,94 @@ export const contentList = {
     button1: "New",
     // button2: "Bulk Upload",
     button3: "Actions",
-    },
+  },
   editModal: {
     title: "Edit Modal",
     subTitle:
       "To initiate edits, interact with the requisite fields and execute a 'Submit' action to preserve your alterations.",
     formFields: {
+      id: {
+        label: "ID",
+        placeholder: "Enter unique ID",
+        validation: "id",
+        type: "text",
+      },
+      provider_id: {
+        label: "Provider ID",
+        options: [
+          { value: "", label: "Select Provider" },
+          { value: "p1", label: "p1" },
+        ],
+        validation: "provider_id",
+        type: "select",
+      },
       title: {
         label: "Content Name",
         placeholder: "Enter content name",
         validation: "title",
         type: "text",
       },
-      publisher: {
-        label: "Publisher",
-        placeholder: "Enter publisher name",
-        validation: "publisher",
-        type: "text",
-      },
-      description: {
-        label: "Description",
-        placeholder: "Enter content description",
-        validation: "description",
+      short_desc: {
+        label: "Short Description",
+        placeholder: "Enter short description",
+        validation: "short_desc",
         type: "textarea",
       },
-      icon: {
-        label: "Icon",
-        validation: "icon",
+      long_desc: {
+        label: "Long Description",
+        placeholder: "Enter long description",
+        validation: "long_desc",
+        type: "textarea",
+      },
+      item_img: {
+        label: "Item Image",
+        validation: "item_img",
         type: "file",
-        previouslyUploadedText: "Previously uploaded file:",
       },
-      contentType: {
-        label: "Type of Content",
-        options: [
-          { value: "", label: "Select Type" },
-          { value: "Video", label: "Video" },
-          { value: "Read Along", label: "Read Along" },
-          { value: "Read", label: "Read" },
-          { value: "Audio", label: "Audio" },
-          { value: "Sign Language", label: "Sign Language" },
-        ],
-        validation: "contentType",
-        type: "select",
-      },
-      language: {
-        label: "Language",
-        options: [
-          { value: "", label: "Select a Language" },
-          { value: "English", label: "English" },
-          { value: "Hindi", label: "Hindi" },
-          { value: "Marathi", label: "Marathi" },
-        ],
-        validation: "language",
-        type: "select",
-      },
-      url: {
-        label: "Content URL",
-        placeholder: "Enter content URL",
+      media_url: {
+        label: "Media URL",
+        placeholder: "Enter Media URL",
         validation: "url",
         type: "text",
       },
-      fileType: {
-        label: "File Type",
+      item_medias: {
+        label: "Media Type",
         options: [
-          { value: "", label: "Select a File Type" },
-          { value: "Audio", label: "Audio" },
-          { value: "Video", label: "Video" },
-          { value: "Read", label: "Read" },
-          { value: "Others", label: "Others" },
+          { value: "", label: "Select a Media Type" },
+          { value: "application/pdf", label: "Pdf" },
         ],
-        validation: "fileType",
+        validation: "item_medias",
         type: "select",
       },
-      branch: {
-        label: "Branch",
-        options: [
-          { value: "", label: "Select a Branch" },
-          { value: "Horticulture", label: "Horticulture" },
-          { value: "Agronomy", label: "Agronomy" },
-          { value: "Fishery", label: "Fishery" },
-          { value: "Forestry", label: "Forestry" },
-        ],
-        validation: "branch",
-        type: "select",
+      item_categories: {
+        label: "Select a Category",
+        validation: "item_categories",
+        type: "selectDynamic",
+        options: [],
       },
-      crop: {
-        label: "Crops",
-        options: [
-          { value: "", label: "Select a Crop" },
-          { value: "Chilly", label: "Chilly" },
-          { value: "Onion", label: "Onion" },
-          { value: "Rice", label: "Rice" },
-          { value: "Tomatoes", label: "Tomatoes" },
-          { value: "Mango", label: "Mango" },
-        ],
-        validation: "crop",
-        type: "select",
+      item_fulfillments: {
+        label: "Select a Fulfillment",
+        validation: "item_fulfillments",
+        type: "selectDynamic",
+        options: [],
       },
-      state: {
-        label: "State",
-        options: [
-          { value: "", label: "Select a State" },
-          { value: "Maharashtra", label: "Maharashtra" },
-        ],
-        validation: "state",
-        type: "select",
+      item_location_state: {
+        label: "Select State",
+        validation: "item_location_state",
+        type: "selectDynamic",
+        options: [],
       },
-      region: {
-        label: "Region",
-        options: [
-          { value: "", label: "Select a Region" },
-          { value: "Desh", label: "Desh" },
-          { value: "Marathwada", label: "Marathwada" },
-          { value: "Konkan", label: "Konkan" },
-        ],
-        validation: "region",
-        type: "select",
+      item_location_city: {
+        label: "Select City",
+        validation: "item_location_city",
+        type: "selectDynamic",
+        options: [],
       },
-      target_users: {
-        label: "Targeted Users",
-        options: [
-          { value: "", label: "Select Targeted Users" },
-          { value: "Farmers", label: "Farmers" },
-          { value: "FLEWS", label: "FLEWS" },
-          { value: "Scientists", label: "Scientists" },
-          { value: "KVKs", label: "KVKs" },
-        ],
-        validation: "target_users",
-        type: "select",
-      },
-      monthOrSeason: {
-        label: "Month or Season",
-        placeholder: "Enter month or season",
-        validation: "monthOrSeason",
-        type: "text",
-      },
-      publishDate: {
-        label: "Publish Date",
-        validation: "publishDate",
-        type: "date",
-      },
-      expiryDate: {
-        label: "Expiry Date",
-        validation: "expiryDate",
-        type: "date",
+      tags: {
+        label: "Tags",
+        validation: "tags",
+        type: "tags",
+        options: [],
       },
     },
     buttons: {
