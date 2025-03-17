@@ -11,7 +11,7 @@ import {
 } from "./index";
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-import {api} from '../config/ICAR-Config'
+import { api } from "../config/ICAR-Config";
 
 export const adminRegisterApi = async (params = {}, header = {}) => {
   let headers = {
@@ -88,7 +88,11 @@ export const createContentApi = async (params = {}, header = {}) => {
     Authorization: "Bearer " + localStorage.getItem("token"),
   };
   try {
-    const result = await post(`${baseUrl}${api.endpoints.createContent}`, params, { headers });
+    const result = await post(
+      `${baseUrl}${api.endpoints.createContent}`,
+      params,
+      { headers }
+    );
     if (result.data) {
       return result.data;
     } else {
@@ -148,7 +152,6 @@ export const getProviderInfo = async (id, params = {}, header = {}) => {
   }
 };
 
-
 export const getContent = async (params = {}, header = {}) => {
   let headers = {
     ...header,
@@ -161,7 +164,7 @@ export const getContent = async (params = {}, header = {}) => {
     });
 
     if (result?.data) {
-      return result.data; 
+      return result.data;
     } else {
       return [];
     }
@@ -173,16 +176,19 @@ export const getContent = async (params = {}, header = {}) => {
   }
 };
 
-
 export const updateContent = async (id, params = {}, header = {}) => {
   try {
     let headers = {
       ...header,
       Authorization: "Bearer " + localStorage.getItem("token"),
     };
-    const result = await patch(`${baseUrl}${api.endpoints.updateContent}/${id}`, params, {
-      headers,
-    });
+    const result = await patch(
+      `${baseUrl}${api.endpoints.updateContent}/${id}`,
+      params,
+      {
+        headers,
+      }
+    );
     if (result?.data) {
       return result?.data;
     } else {
@@ -202,9 +208,13 @@ export const resetPassword = async (params = {}, header = {}) => {
       ...header,
       Authorization: "Bearer " + localStorage.getItem("token"),
     };
-    const result = await patch(`${baseUrl}/${api.endpoints.resetPassword}`, params, {
-      headers,
-    });
+    const result = await patch(
+      `${baseUrl}/${api.endpoints.resetPassword}`,
+      params,
+      {
+        headers,
+      }
+    );
     if (result?.data) {
       return result?.data;
     } else {
@@ -293,9 +303,13 @@ export const createNewContentCollection = async (params = {}, header = {}) => {
     Authorization: "Bearer " + localStorage.getItem("token"),
   };
   try {
-    const result = await post(`${baseUrl}/${api.endpoints.createNewContentCollection}`, params, {
-      headers,
-    });
+    const result = await post(
+      `${baseUrl}/${api.endpoints.createNewContentCollection}`,
+      params,
+      {
+        headers,
+      }
+    );
     if (result?.data) {
       return result?.data;
     } else {
@@ -316,9 +330,12 @@ export const getCollectionInfo = async (id, params = {}, header = {}) => {
   };
 
   try {
-    const result = await get(`${baseUrl}/${api.endpoints.getCollectionInfo}/${id}`, {
-      headers,
-    });
+    const result = await get(
+      `${baseUrl}/${api.endpoints.getCollectionInfo}/${id}`,
+      {
+        headers,
+      }
+    );
 
     if (result?.data) {
       return result?.data?.data?.collection[0];
@@ -371,9 +388,13 @@ export const uploadImage = async (params = {}, header = {}) => {
     Authorization: "Bearer " + localStorage.getItem("token"),
   };
   try {
-    const result = await post(`${baseUrl}${api.endpoints.uploadImage}`, params, {
-      headers,
-    });
+    const result = await post(
+      `${baseUrl}${api.endpoints.uploadImage}`,
+      params,
+      {
+        headers,
+      }
+    );
     if (result?.data) {
       return result?.data;
     } else {
@@ -459,27 +480,23 @@ export const updateCollection = async (id, params = {}, header = {}) => {
   }
 };
 
-export const getContentById = async (item_id, params = {}, header = {}) => {
-  let headers = {
-    ...header,
-    Authorization: "Bearer " + localStorage.getItem("token"),
-  };
-
+export const getContentById = async (item_id) => {
   try {
-    const result = await get(`${baseUrl}${api.endpoints.getContentById}/${item_id}`, {
-      headers,
-    });
-
-    if (result?.data) {
-      return result?.data?.data?.icar_?.Content[0];
-    } else {
-      return [];
-    }
-  } catch ({ response, message }) {
-    return {
-      status: response?.status ? response?.status : 404,
-      error: response?.data?.message ? response?.data?.message : message,
+    const headers = {
+      Authorization: "Bearer " + localStorage.getItem("token"),
     };
+    const response = await get(
+      `${baseUrl}${api.endpoints.getContentById}/${item_id}`,
+      { headers }
+    );
+
+    if (Array.isArray(response?.data) && response.data.length > 0) {
+      return response.data[0];
+    }
+    return null;
+  } catch (error) {
+    console.error("getContentById error:", error);
+    return null;
   }
 };
 

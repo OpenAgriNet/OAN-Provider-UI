@@ -205,25 +205,24 @@ export const contentList = {
       provider_id: {
         label: "Provider ID",
         options: [
-          { value: "", label: "Select Provider" },
           { value: "p1", label: "p1" },
         ],
         validation: "provider_id",
         type: "select",
       },
-      title: {
+      content_name: {
         label: "Content Name",
         placeholder: "Enter content name",
         validation: "title",
         type: "text",
       },
-      short_desc: {
+      item_short_desc: {
         label: "Short Description",
         placeholder: "Enter short description",
         validation: "short_desc",
         type: "textarea",
       },
-      long_desc: {
+      item_long_desc: {
         label: "Long Description",
         placeholder: "Enter long description",
         validation: "long_desc",
@@ -248,7 +247,6 @@ export const contentList = {
       item_medias: {
         label: "Media Type",
         options: [
-          { value: "", label: "Select a Media Type" },
           { value: "application/pdf", label: "Pdf" },
         ],
         validation: "item_medias",
@@ -256,28 +254,24 @@ export const contentList = {
       },
       item_categories: {
         label: "Select a Category",
-        validation: "item_categories",
-        type: "selectDynamic",
-        options: [],
+        type: "select",
+        options: [], // This can be empty initially
       },
       item_fulfillments: {
         label: "Select a Fulfillment",
-        validation: "item_fulfillments",
-        type: "selectDynamic",
+        type: "select",
         options: [],
       },
       item_location_state: {
         label: "Select State",
-        validation: "item_location_state",
-        type: "selectDynamic",
+        type: "select",
         options: [],
       },
       item_location_city: {
         label: "Select City",
-        validation: "item_location_city",
-        type: "selectDynamic",
+        type: "select",
         options: [],
-      },
+      },      
       tags: {
         label: "Tags",
         validation: "tags",
