@@ -162,11 +162,13 @@ const MyCourses = () => {
         item_short_desc: contentData.item_short_desc,
         item_long_desc: contentData.item_long_desc,
         item_categories:
-          contentData.item_category_ids && contentData.item_category_ids.length > 0
+          contentData.item_category_ids &&
+          contentData.item_category_ids.length > 0
             ? contentData.item_category_ids[0]
             : "",
         item_fulfillments:
-          contentData.item_fulfillment_ids && contentData.item_fulfillment_ids.length > 0
+          contentData.item_fulfillment_ids &&
+          contentData.item_fulfillment_ids.length > 0
             ? contentData.item_fulfillment_ids[0]
             : "",
       };
@@ -233,7 +235,7 @@ const MyCourses = () => {
       const deletePromises = dataArray.map((id) => deleteContentbyId(id));
       const results = await Promise.all(deletePromises);
       if (results.every((res) => res)) {
-        getMyCourses();
+        getMyCourses(); // refresh list
         setSelectedRowKeys([]);
         setSelectedRows([]);
         setIsOpen(false);
@@ -255,14 +257,22 @@ const MyCourses = () => {
     }
   };
 
-  // ====== react-hook-form Setup ======
-  const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm();
-  const { register: register2, handleSubmit: handleSubmit2, formState: { errors: errors2 }, reset: reset2 } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+  } = useForm();
+  const {
+    register: register2,
+    handleSubmit: handleSubmit2,
+    formState: { errors: errors2 },
+    reset: reset2,
+  } = useForm();
 
-  // ====== Submit: Edit Modal ======
   const onSubmit = async (data) => {
     try {
-      // Handle file upload if needed.
       if (selectedFile) {
         const formdata = new FormData();
         formdata.append("file", selectedFile);
@@ -297,12 +307,6 @@ const MyCourses = () => {
       } else {
         data.item_location_ids = [];
       }
-
-      // IMPORTANT: Build a clean payload that only includes the keys your API expects.
-      // For example, if your updateContent API expects only the following keys:
-      // provider_id, item_name, item_short_desc, item_long_desc, icon,
-      // item_category_ids, item_fulfillment_ids, and item_location_ids,
-      // then construct a new object accordingly.
       const payload = {
         provider_id: data.provider_id,
         item_name: data.content_name,
@@ -329,7 +333,6 @@ const MyCourses = () => {
     }
   };
 
-  // ====== Submit: Add to Collection Modal ======
   const onSubmitCollection = async (data) => {
     try {
       const collection_id = data?.collection_id;
@@ -361,7 +364,6 @@ const MyCourses = () => {
     }
   };
 
-  // ====== Modal Close ======
   const closeModal = () => {
     setIsOpen(false);
     reset();
@@ -371,11 +373,18 @@ const MyCourses = () => {
     reset(formData);
   }, [formData, reset]);
 
-  // ====== Table Columns ======
   const columns = [
     { title: "Item Name", dataIndex: "item_name", key: "item_name" },
-    { title: "Provider Name", dataIndex: "provider_name", key: "provider_name" },
-    { title: "Short Description", dataIndex: "provider_short_desc", key: "provider_short_desc" },
+    {
+      title: "Provider Name",
+      dataIndex: "provider_name",
+      key: "provider_name",
+    },
+    {
+      title: "Short Description",
+      dataIndex: "provider_short_desc",
+      key: "provider_short_desc",
+    },
     {
       title: "Created Date",
       dataIndex: "createdDate",
@@ -392,7 +401,6 @@ const MyCourses = () => {
     </div>
   );
 
-  // ====== Dynamic Location Dropdowns ======
   const distinctStates = useMemo(() => {
     const stateSet = new Set();
     locations.forEach((loc) => stateSet.add(loc.state_name));
@@ -407,12 +415,11 @@ const MyCourses = () => {
     return locations
       .filter((loc) => loc.state_name === selectedState)
       .map((loc) => ({
-        value: loc.city_name, // using city name as value
+        value: loc.city_name,
         label: loc.city_name,
       }));
   }, [locations, selectedState]);
 
-  // ====== Splitting Form Fields (Two-Column Layout) ======
   const splitFormFields = () => {
     const fieldsArray = Object.entries(contentList.editModal.formFields);
     const halfLength = Math.ceil(fieldsArray.length / 2);
@@ -421,7 +428,6 @@ const MyCourses = () => {
     return { firstColumnFields, secondColumnFields };
   };
 
-  // ====== Render Fields with Floating Labels ======
   const renderFormFieldsInColumns = () => {
     const { firstColumnFields, secondColumnFields } = splitFormFields();
     const renderFields = (fields) =>
@@ -438,7 +444,9 @@ const MyCourses = () => {
                   {field.type === "textarea" ? (
                     <>
                       <textarea
-                        className={`form-control ${errors[key] ? "is-invalid" : ""}`}
+                        className={`form-control ${
+                          errors[key] ? "is-invalid" : ""
+                        }`}
                         id={key}
                         placeholder={field.label}
                         {...register(key)}
@@ -450,7 +458,9 @@ const MyCourses = () => {
                   ) : field.type === "file" ? (
                     <>
                       <input
-                        className={`form-control ${errors[key] ? "is-invalid" : ""}`}
+                        className={`form-control ${
+                          errors[key] ? "is-invalid" : ""
+                        }`}
                         type="file"
                         id={key}
                         placeholder={field.label}
@@ -462,7 +472,9 @@ const MyCourses = () => {
                   ) : (
                     <>
                       <input
-                        className={`form-control ${errors[key] ? "is-invalid" : ""}`}
+                        className={`form-control ${
+                          errors[key] ? "is-invalid" : ""
+                        }`}
                         type={field.type}
                         id={key}
                         placeholder={field.label}
@@ -472,7 +484,9 @@ const MyCourses = () => {
                       <label htmlFor={key}>{field.label}</label>
                     </>
                   )}
-                  {errors[key] && <p style={{ color: "red" }}>{errors[key].message}</p>}
+                  {errors[key] && (
+                    <p style={{ color: "red" }}>{errors[key].message}</p>
+                  )}
                 </div>
               </div>
             );
@@ -510,7 +524,9 @@ const MyCourses = () => {
                     ))}
                   </select>
                   <label htmlFor={key}>{field.label}</label>
-                  {errors[key] && <p style={{ color: "red" }}>{errors[key].message}</p>}
+                  {errors[key] && (
+                    <p style={{ color: "red" }}>{errors[key].message}</p>
+                  )}
                 </div>
               </div>
             );
@@ -532,7 +548,14 @@ const MyCourses = () => {
       <div className={styles.headerDiv}>
         <Header />
       </div>
-      <div style={{ marginTop: "120px", display: "flex", justifyContent: "flex-end", marginRight: "20px" }}>
+      <div
+        style={{
+          marginTop: "120px",
+          display: "flex",
+          justifyContent: "flex-end",
+          marginRight: "20px",
+        }}
+      >
         <div>
           <a
             className={styles.anchor}
@@ -541,9 +564,16 @@ const MyCourses = () => {
               borderColor: colors.primaryButtonColor.default,
               color: colors.primaryButtonColor.text,
             }}
-            onMouseEnter={(e) => { e.target.style.backgroundColor = colors.primaryButtonColor.hover; }}
-            onMouseLeave={(e) => { e.target.style.backgroundColor = colors.primaryButtonColor.default; }}
-            onClick={() => { navigate("/tagcontent"); }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = colors.primaryButtonColor.hover;
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor =
+                colors.primaryButtonColor.default;
+            }}
+            onClick={() => {
+              navigate("/tagcontent");
+            }}
           >
             {contentList.button.button1}
           </a>
@@ -563,8 +593,14 @@ const MyCourses = () => {
                 borderColor: colors.primaryButtonColor.default,
                 color: colors.primaryButtonColor.text,
               }}
-              onMouseEnter={(e) => { e.target.style.backgroundColor = colors.primaryButtonColor.hover; }}
-              onMouseLeave={(e) => { e.target.style.backgroundColor = colors.primaryButtonColor.default; }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor =
+                  colors.primaryButtonColor.hover;
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor =
+                  colors.primaryButtonColor.default;
+              }}
             >
               {contentList.button.button3}
             </a>
@@ -572,13 +608,39 @@ const MyCourses = () => {
         </div>
       </div>
       {alertMessage && (
-        <Space direction="vertical" style={{ width: "100%", zIndex: "999", justifyContent: "center", alignItems: "center" }}>
-          <Alert message="Created Successfully" type="success" showIcon closable />
+        <Space
+          direction="vertical"
+          style={{
+            width: "100%",
+            zIndex: "999",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Alert
+            message="Created Successfully"
+            type="success"
+            showIcon
+            closable
+          />
         </Space>
       )}
       {updateAlertMessage && (
-        <Space direction="vertical" style={{ width: "100%", zIndex: "999", justifyContent: "center", alignItems: "center" }}>
-          <Alert message="Updated Successfully" type="success" showIcon closable />
+        <Space
+          direction="vertical"
+          style={{
+            width: "100%",
+            zIndex: "999",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Alert
+            message="Updated Successfully"
+            type="success"
+            showIcon
+            closable
+          />
         </Space>
       )}
       <div style={{ width: "100%", height: "100vh", marginTop: "5px" }}>
@@ -602,8 +664,19 @@ const MyCourses = () => {
           }}
         />
       </div>
-      <Modal open={isOpen} onCancel={closeModal} title={contentList.editModal.title} footer={null} width={1000}>
-        <form className="card-body form-floating mt-3 mx-1" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+      <Modal
+        open={isOpen}
+        onCancel={() => setIsOpen(false)}
+        maskClosable={false}
+        title={contentList.editModal.title}
+        footer={null}
+        width={1000}
+      >
+        <form
+          className="card-body form-floating mt-3 mx-1"
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="mb-3" style={customStyles.scrollableContent}>
             <div className="container mb-3">
               <div className="h6" style={{ color: "#0F75BC" }}>
@@ -611,26 +684,50 @@ const MyCourses = () => {
               </div>
             </div>
             {renderFormFieldsInColumns()}
-            <div style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                alignItems: "center",
+              }}
+            >
               <Button
                 className="btn btn-secondary"
                 style={{
                   width: "100px",
                   height: "40px",
-                  backgroundColor: colors.editModalButtonColors.cancelButton.default,
+                  backgroundColor:
+                    colors.editModalButtonColors.cancelButton.default,
                   color: colors.editModalButtonColors.cancelButton.text,
                   border: colors.editModalButtonColors.cancelButton.borderColor,
                 }}
-                onMouseEnter={(e) => { e.target.style.backgroundColor = colors.editModalButtonColors.cancelButton.hover; }}
-                onMouseLeave={(e) => { e.target.style.backgroundColor = colors.editModalButtonColors.cancelButton.default; }}
-                onClick={() => { setIsOpen(false); reset(); }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor =
+                    colors.editModalButtonColors.cancelButton.hover;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor =
+                    colors.editModalButtonColors.cancelButton.default;
+                }}
+                onClick={() => {
+                  setIsOpen(false);
+                  reset();
+                }}
               >
                 {contentList.editModal.buttons.cancelButton}
               </Button>
               <Popconfirm
                 placement="top"
                 title="Are you sure delete?"
-                onConfirm={() => { deleteContent(formData?.item_id); }}
+                onConfirm={() => {
+                  // Only after user clicks 'Yes' do we delete & close
+                  deleteContent(formData?.item_id);
+                  setIsOpen(false); 
+                  reset();
+                }}
+                onCancel={() => {
+                  // If user clicks 'No', do nothing; modal stays open
+                }}
                 okText="Yes"
                 cancelText="No"
               >
@@ -640,12 +737,22 @@ const MyCourses = () => {
                   style={{
                     width: "100px",
                     height: "40px",
-                    backgroundColor: colors.editModalButtonColors.deleteButton.default,
+                    backgroundColor:
+                      colors.editModalButtonColors.deleteButton.default,
                     color: colors.editModalButtonColors.deleteButton.text,
                   }}
-                  onMouseEnter={(e) => { e.target.style.backgroundColor = colors.editModalButtonColors.deleteButton.hover; }}
-                  onMouseLeave={(e) => { e.target.style.backgroundColor = colors.editModalButtonColors.deleteButton.default; }}
-                  onClick={() => { setIsOpen(false); reset(); }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor =
+                      colors.editModalButtonColors.deleteButton.hover;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor =
+                      colors.editModalButtonColors.deleteButton.default;
+                  }}
+                  onClick={() => {
+                    setIsOpen(false);
+                    reset();
+                  }}
                 >
                   {contentList.editModal.buttons.deleteButton}
                 </Button>
@@ -653,12 +760,19 @@ const MyCourses = () => {
               <button
                 className="btn btn-primary"
                 style={{
-                  backgroundColor: colors.editModalButtonColors.saveChangesButton.default,
+                  backgroundColor:
+                    colors.editModalButtonColors.saveChangesButton.default,
                   color: colors.editModalButtonColors.saveChangesButton.text,
                   border: colors.editModalButtonColors.cancelButton.borderColor,
                 }}
-                onMouseEnter={(e) => { e.target.style.backgroundColor = colors.editModalButtonColors.saveChangesButton.hover; }}
-                onMouseLeave={(e) => { e.target.style.backgroundColor = colors.editModalButtonColors.saveChangesButton.default; }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor =
+                    colors.editModalButtonColors.saveChangesButton.hover;
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor =
+                    colors.editModalButtonColors.saveChangesButton.default;
+                }}
               >
                 {contentList.editModal.buttons.saveChangesButton}
               </button>
@@ -669,11 +783,17 @@ const MyCourses = () => {
       <Modal
         title="Add collection"
         open={isModalOpen}
-        onCancel={() => { setIsModalOpen(false); }}
+        onCancel={() => {
+          setIsModalOpen(false);
+        }}
         footer={false}
         width={1000}
       >
-        <form className="card-body form-floating mt-3 mx-1" onSubmit={handleSubmit2(onSubmitCollection)} autoComplete="off">
+        <form
+          className="card-body form-floating mt-3 mx-1"
+          onSubmit={handleSubmit2(onSubmitCollection)}
+          autoComplete="off"
+        >
           <div>
             <label className="form-label" htmlFor="collection_id">
               <strong>Select a Collection</strong>
@@ -682,7 +802,11 @@ const MyCourses = () => {
           <br />
           <div className="container mb-3">
             <div className="form-floating">
-              <select className="form-select" id="collection_id" {...register2("collection_id")}>
+              <select
+                className="form-select"
+                id="collection_id"
+                {...register2("collection_id")}
+              >
                 <option value="">-- Select Collection --</option>
                 {collectionLists.map((coll) => (
                   <option key={coll.id} value={coll.id}>
@@ -693,7 +817,13 @@ const MyCourses = () => {
               <label htmlFor="collection_id">Collection</label>
             </div>
           </div>
-          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
             <Button
               className="btn btn-secondary"
               style={{ width: "100%", height: "100%" }}

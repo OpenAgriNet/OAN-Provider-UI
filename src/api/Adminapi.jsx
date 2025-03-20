@@ -502,30 +502,26 @@ export const getContentById = async (item_id) => {
 
 export const deleteContentbyId = async (id, params = {}, header = {}) => {
   try {
-    let headers = {
+    const headers = {
       ...header,
       Authorization: "Bearer " + localStorage.getItem("token"),
     };
-    const result = await distory(
+    const result = await axios.delete(
       `${baseUrl}${api.endpoints.deleteContentById}/${id}`,
-      {},
-      {
-        headers: headers ? headers : {},
-      }
+      { headers }
     );
-
-    if (result?.data?.data) {
-      return result.data?.data;
-    } else {
-      return {};
+    if (result.data) {
+      return result.data; // or result.data?.data depending on your response
     }
+    return {};
   } catch ({ response, message }) {
     return {
-      status: response?.status ? response?.status : 404,
-      error: response?.data?.message ? response?.data?.message : message,
+      status: response?.status || 404,
+      error: response?.data?.message || message,
     };
   }
 };
+
 
 export const getImageUrl = async (params = {}, header = {}) => {
   let headers = {
