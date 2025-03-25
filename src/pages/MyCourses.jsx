@@ -273,65 +273,47 @@ const MyCourses = () => {
 
   const onSubmit = async (data) => {
     try {
-      if (selectedFile) {
-        const formdata = new FormData();
-        formdata.append("file", selectedFile);
-        const imageUploadResponse = await uploadImage(formdata);
-        setimageUploadData(imageUploadResponse);
-        data.icon = imageUploadResponse?.key;
-        setSelectedFile(null);
-      } else {
-        data.icon = formData?.icon;
-      }
-
-      // Rebuild media data.
-      data.item_media = [
-        {
-          url: data.media_url || "",
-          mimetype: data.item_medias || "",
-        },
-      ];
-
-      // Rebuild category and fulfillment arrays.
-      data.item_category_ids = [data.item_categories];
-      data.item_fulfillment_ids = [data.item_fulfillments];
-
-      // For location, find the matching location using the selected state and city.
-      const selectedLoc = locations.find(
-        (loc) =>
-          loc.state_name === data.item_location_state &&
-          loc.city_name === data.item_location_city
-      );
-      if (selectedLoc) {
-        data.item_location_ids = [selectedLoc.id];
-      } else {
-        data.item_location_ids = [];
-      }
+      // 1️⃣ Build the payload exactly like your curl example
       const payload = {
-        provider_id: data.provider_id,
-        item_name: data.content_name,
-        item_short_desc: data.item_short_desc,
-        item_long_desc: data.item_long_desc,
-        icon: data.icon,
-        item_category_ids: data.item_category_ids,
-        item_fulfillment_ids: data.item_fulfillment_ids,
-        item_location_ids: data.item_location_ids,
+        items: {
+          id: data.id,
+          provider_id: data.provider_id,
+          name: data.content_name,
+          short_desc: data.item_short_desc,
+          long_desc: data.item_long_desc,
+        },
+        item_categories: [{ category_id: data.item_categories }],
+        item_fulfillments: [{ fulfillment_id: data.item_fulfillments }],
+        item_locations: [
+          { location_id: locations.find(loc =>
+              loc.state_name === data.item_location_state &&
+              loc.city_name === data.item_location_city
+            )?.id || "" }
+        ],
+        item_images: [{ url: data.item_img }],
+        item_medias: [{
+          mimetype: data.item_medias,
+          url: data.media_url,
+        }],
       };
-
+  
+      // 2️⃣ Call your updated API util
       const result = await updateContent(data.id, payload);
-      if (result?.data?.icar_?.update_Content) {
+  
+      if (result?.data) {
         handleupdateShowAlert();
-        const updatedContent = await getContentById(data.id);
-        setFormData(updatedContent);
-        getMyCourses();
+        await getMyCourses();
         setIsOpen(false);
       } else {
+        console.error("Update failed:", result);
         alert("Update failed");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error in update:", error);
+      alert("An unexpected error occurred");
     }
   };
+  
 
   const onSubmitCollection = async (data) => {
     try {
