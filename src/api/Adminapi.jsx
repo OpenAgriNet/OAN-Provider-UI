@@ -178,26 +178,21 @@ export const getContent = async (params = {}, header = {}) => {
 
 export const updateContent = async (id, params = {}, header = {}) => {
   try {
-    let headers = {
+    const headers = {
       ...header,
-      Authorization: "Bearer " + localStorage.getItem("token"),
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
     };
-    const result = await patch(
+    const response = await axios.put(
       `${baseUrl}${api.endpoints.updateContent}/${id}`,
       params,
-      {
-        headers,
-      }
+      { headers }
     );
-    if (result?.data) {
-      return result?.data;
-    } else {
-      return [];
-    }
-  } catch ({ response, message }) {
+    return response.data;
+  } catch (error) {
     return {
-      status: response?.status ? response?.status : 404,
-      error: response?.data?.message ? response?.data?.message : message,
+      status: error.response?.status || 500,
+      error: error.response?.data?.message || error.message,
     };
   }
 };
@@ -502,27 +497,22 @@ export const getContentById = async (item_id) => {
 
 export const deleteContentbyId = async (id, params = {}, header = {}) => {
   try {
-    let headers = {
+    const headers = {
       ...header,
       Authorization: "Bearer " + localStorage.getItem("token"),
     };
-    const result = await distory(
+    const result = await axios.delete(
       `${baseUrl}${api.endpoints.deleteContentById}/${id}`,
-      {},
-      {
-        headers: headers ? headers : {},
-      }
+      { headers }
     );
-
-    if (result?.data?.data) {
-      return result.data?.data;
-    } else {
-      return {};
+    if (result.data) {
+      return result.data; // or result.data?.data depending on your response
     }
+    return {};
   } catch ({ response, message }) {
     return {
-      status: response?.status ? response?.status : 404,
-      error: response?.data?.message ? response?.data?.message : message,
+      status: response?.status || 404,
+      error: response?.data?.message || message,
     };
   }
 };

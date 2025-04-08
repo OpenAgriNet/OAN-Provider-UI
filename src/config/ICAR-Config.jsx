@@ -188,7 +188,6 @@ export const publishContent = {
 export const contentList = {
   button: {
     button1: "New",
-    // button2: "Bulk Upload",
     button3: "Actions",
   },
   editModal: {
@@ -308,14 +307,14 @@ export const api = {
   endpoints: {
     createContent: "provider/addContent",
     getContent: "provider/content",
-    updateContent: "provider/content",
+    updateContent: "provider/editContent",
     getCollectionList: "provider/content",
     createNewContentCollection: "provider/contentCollection",
     getCollectionInfo: "provider/collection",
     uploadImage: "provider/uploadImage",
     uploadCSV: "provider/createBulkContent",
     getContentById: "provider/contentById",
-    deleteContentById: "provider/content",
+    deleteContentById: "provider/deleteContent",
     resetPassword: "provider/resetPassword",
   },
 };
