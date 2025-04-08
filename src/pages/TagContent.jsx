@@ -97,12 +97,10 @@ const TagContent = () => {
     return Array.from(cityMap.values());
   }, [locations, selectedState]);
 
-  // Updated validation schema with new required fields
   const validationSchema = yup.object().shape({
     id: yup.string().required("ID is required"),
     provider_id: yup.string().required("Provider ID is required"),
     title: yup.string().required("Title is required"),
-    // Use the correct field names here:
     short_desc: yup.string().required("Short Description is required"),
     long_desc: yup.string().required("Long Description is required"),
     item_img: yup.mixed().required("Item image is required"),
@@ -123,7 +121,6 @@ const TagContent = () => {
 
   const onSubmit = async (data) => {
     try {
-      // Construct the payload
       const payload = {
         items: {
           id: data.id,
@@ -158,7 +155,6 @@ const TagContent = () => {
         ],
       };
 
-      // If user uploads an image:
       if (selectedFile) {
         const formData = new FormData();
         formData.append("file", selectedFile);
@@ -166,13 +162,10 @@ const TagContent = () => {
         payload.item_images[0].url = imageUploadResponse?.key || "";
         payload.item_images.url = imageUploadResponse?.key;
       }
-      // Make the API call
       const result = await createContentApi(payload);
 
-      // Check if the API indicates success or failure
-      // (Adjust the condition based on your API's actual response format)
+
       if (result?.status && result.status !== 200) {
-        // Show an error popup
         Swal.fire({
           title: "Error!",
           text: result.error || "Something went wrong. Please try again.",
@@ -181,7 +174,6 @@ const TagContent = () => {
           confirmButtonColor: "#3e6139",
         });
       } else {
-        // Show a success popup
         Swal.fire({
           title: "Content Created!",
           text: "Your content has been successfully created.",
@@ -206,10 +198,8 @@ const TagContent = () => {
     }
   };
 
-  // Get all allowed field keys from config (includes new fields)
   const allowedFields = Object.keys(publishContent.formFields);
 
-  // Split the allowedFields array into two parts for two columns
   const middleIndex = Math.ceil(allowedFields.length / 2);
   const firstColumnFields = allowedFields.slice(0, middleIndex);
   const secondColumnFields = allowedFields.slice(middleIndex);
