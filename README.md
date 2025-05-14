@@ -14,7 +14,7 @@ The OAN Provider app is designed for content creators who wish to manage and pub
 **To get started, clone the repository and install the required dependencies:**
 
 ```bash
-git clone https://github.com/tekdi/OAN-Provider-UI.git
+git clone https://github.com/OpenAgriNet/OAN-Provider-UI.git
 ```
 
 **Navigate to the project folder:**
